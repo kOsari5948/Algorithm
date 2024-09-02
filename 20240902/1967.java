@@ -37,8 +37,9 @@ public class Main {
 		}
 		
 		max = -1;
-		
-		visited = new boolean[n+1];
+
+	//귀류 법 참조 https://blog.naver.com/adamdoha/222121145206
+	visited = new boolean[n+1];
         visited[1] = true;
         dfs(1,0);
         
