@@ -1,0 +1,162 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class Main {
+	public static int max;
+	public static String result;
+	public static HashSet<Integer> hs;
+	public static int[] a,b;
+	public static void main(String[] args) throws Exception{
+		Scanner sc =new Scanner(System.in);
+		
+		int t = sc.nextInt();
+		
+		for(int tt =0; tt<t; tt++) {
+			String t1 = sc.next();
+			String t2 = sc.next();
+			
+			
+			a = new int[4];
+			b = new int[4];
+			
+			int index = 3;
+			for(int i =t1.length()-1; i>=0;i--) {
+				a[index] = t1.charAt(i)-'0';
+				index--;
+			}
+			
+			index = 3;
+			for(int i =t2.length()-1; i>=0;i--) {
+				b[index] = t2.charAt(i)-'0';
+				index--;
+			}
+			
+			max = Integer.MAX_VALUE;
+			result ="";
+			
+			hs = new HashSet<Integer>();
+			hs.add(Integer.parseInt(t1));
+			dfs(Integer.parseInt(t1),Integer.parseInt(t2),"");
+			
+			System.out.println(result);
+			
+			
+		}
+	}
+	
+	public static void dfs(int x, int y, String s) {
+		//현재 값 저장
+		//4개의 명령을 각각 실행
+		//명령을 실행했을때 저장된 값이랑 같은거 있으면 return
+		//아니라면 새로운 값 저장
+		//만약 새로운 값이 목표량 같은 값이라면 해당 값이 최소의 값인지 확인
+		//새로운 값이 목표량 같으면서 최소 값이면 저장
+		if(x==y) {
+			if(s.length()<max) {
+				result = s;
+				max = s.length();
+			}
+			return;
+		}
+		
+		for(int i =0; i<4; i++) {
+			int t = run(x, i);
+			
+			if(hs.contains(t)) {
+				continue;
+			}
+			
+			hs.add(t);
+
+			switch (i) {
+			case 0:
+				dfs(t,y,s+"L");
+				break;
+			case 1:
+				dfs(t,y,s+"R");
+				break;
+			case 2:
+				dfs(t,y,s+"D");
+				break;
+			case 3:
+				dfs(t,y,s+"S");
+				break;
+			default:
+			}
+		}
+		
+	}
+	
+	public static int run(int x, int pos) {
+		int re = 0;
+		int t =0;
+		a = new int[4];
+		switch (pos) {
+		case 0: 
+			int index3 = 3;
+			while(x>0){
+				a[index3] = x%10;
+				x /=10;
+				index3--;
+			}
+			t = a[0];
+			for(int i =1; i<4;i++) {
+				a[i-1] =a[i];
+			}
+			a[3] = t;
+			break;
+		case 1: 
+			int index4 = 3;
+			while(x>0){
+				a[index4] = x%10;
+				x /=10;
+				index4--;
+			}
+			t = a[3];
+			for(int i =3; i>=1;i--) {
+				a[i] =a[i-1];
+			}
+			a[0] = t;
+			break;
+		case 2:
+			t = x*2;
+			t%=10000;
+			int index1 = 3;
+			while(t>0){
+				a[index1] = t%10;
+				t /=10;
+				index1--;
+			}
+			break;
+		case 3:
+			t = x-1;
+			if(t<0) {
+				t =9999;
+			}
+			int index2 = 3;
+			while(t>0){
+				a[index2] = t%10;
+				t /=10;
+				index2--;
+			}
+			break;
+		default:
+		}
+		
+		
+		re = 0;
+		int index = 0;
+		for(int i = a.length-1; i>=0;i--) {
+			re+=a[i]*Math.pow(10, index);
+			index++;
+		}
+		
+		return re;
+	}
+}
