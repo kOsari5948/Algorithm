@@ -1,0 +1,116 @@
+package Test;
+
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+	public static class Node{
+		//1.괄호 2.숫자
+		int code;
+		String s;
+		
+		public Node(int code, String s) {
+			this.code = code;
+			this.s    =s;
+		}
+	}
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		String s = sc.next();
+		
+		char[] arr = s.toCharArray();
+		
+		Stack<Node>st = new Stack<Node>();
+		
+		for(int i =0; i<arr.length; i++ ) {
+			String t = arr[i]+"";
+			
+			if(t.equals(")")) {
+				//"(" 나올 때 까지 반복 출력해서 더한다 단 그전에 숫작 이외의 것이 나오면 에러
+				int b = 0; //더할 숫자
+				if(st.isEmpty()) {
+					System.out.println(0);
+					return;
+				}
+				
+				Node temp = st.pop();
+				
+				
+				while(true) {
+					if(temp.s.equals("(")) {
+						break;
+					}
+					
+					if(!temp.s.equals("(")&&temp.code ==1) {
+						System.out.println(0);
+						return;
+					}
+					
+					b+= Integer.parseInt(temp.s);
+					if(st.isEmpty()) {
+						System.out.println(0);
+						return;
+					}
+					temp = st.pop();
+				}
+				if(b==0) {
+					b=1;
+				}
+				st.add(new Node(2, (2*b)+""  ));
+			}else if(t.equals("]")) {
+				//3
+				
+				//"(" 나올 때 까지 반복 출력해서 더한다 단 그전에 숫작 이외의 것이 나오면 에러
+				int b = 0; //더할 숫자
+				if(st.isEmpty()) {
+					System.out.println(0);
+					return;
+				}
+				Node temp = st.pop();
+				
+				
+				while(true) {
+					if(temp.s.equals("[")) {
+						break;
+					}
+					
+					if(!temp.s.equals("[")&&temp.code ==1) {
+						System.out.println(0);
+						return;
+					}
+					
+					b+= Integer.parseInt(temp.s);
+					if(st.isEmpty()) {
+						System.out.println(0);
+						return;
+					}
+					temp = st.pop();
+				}
+				if(b==0) {
+					b=1;
+				}
+				st.add(new Node(2, (3*b)+""  ));
+				
+			}else {
+				st.add(new Node(1, t));
+			}
+		}
+		int sum =0;
+		while(!st.isEmpty()) {
+			Node temp = st.pop();
+			
+			if(temp.code == 1) {
+				System.out.println(0);
+				return;
+			}
+			
+			sum+=Integer.parseInt(temp.s);
+		}
+		
+		System.out.println(sum);
+		
+		
+	}
+}
